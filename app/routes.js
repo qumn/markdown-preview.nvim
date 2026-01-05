@@ -16,6 +16,18 @@ use((req, res, next) => {
   next()
 })
 
+// /:number
+use((req, res, next) => {
+  const number = req.asPath.slice(1); // 获取路径中的数字部分
+  if (/^\d+$/.test(number)) {
+    const newUrl = `/page/${number}`;
+    res.writeHead(301, { Location: newUrl }); // 重定向到新的路径
+    res.end();
+  } else {
+    next();
+  }
+});
+
 // /_next/path
 use((req, res, next) => {
   if (/\/_next/.test(req.asPath)) {
@@ -66,7 +78,7 @@ use(async (req, res, next) => {
     const buffer = buffers.find(b => b.id === Number(req.bufnr))
     if (buffer) {
       let fileDir = ''
-      if (req.custImgPath !== '' ){
+      if (req.custImgPath !== '') {
         fileDir = req.custImgPath
       } else {
         fileDir = await plugin.nvim.call('expand', `#${req.bufnr}:p:h`)
@@ -74,21 +86,21 @@ use(async (req, res, next) => {
 
       logger.info('fileDir', fileDir)
 
-      const  mingw_home=process.env.MINGW_HOME;
-      if (mingw_home){
-        if(! fileDir.includes(':')){
+      const mingw_home = process.env.MINGW_HOME;
+      if (mingw_home) {
+        if (!fileDir.includes(':')) {
           // fileDir is unix-like:      /Z/x/y/...., 'Z' means Z:
           // the win-like fileDir should be: Z:\x\y...
           const cygpath = 'cygpath.exe'
-          const cmd=cygpath+' -w'+' -a '+fileDir ;
-          logger.info('cmd',cmd)
-       
+          const cmd = cygpath + ' -w' + ' -a ' + fileDir;
+          logger.info('cmd', cmd)
+
           const { execSync } = require('node:child_process');
           const result = execSync(cmd);
-          fileDir=result.toString('utf8').replace('\n','');
+          fileDir = result.toString('utf8').replace('\n', '');
 
-          logger.info('New fileDir',fileDir);
-        }  
+          logger.info('New fileDir', fileDir);
+        }
       }
 
       let imgPath = decodeURIComponent(decodeURIComponent(req.asPath.replace(reg, '')))
@@ -107,7 +119,7 @@ use(async (req, res, next) => {
         }
       }
       logger.info('imgPath', imgPath);
-      
+
       if (fs.existsSync(imgPath) && !fs.statSync(imgPath).isDirectory()) {
         if (imgPath.endsWith('svg')) {
           res.setHeader('content-type', 'image/svg+xml')
@@ -125,6 +137,7 @@ use((req, res) => {
   res.statusCode = 404
   return fs.createReadStream(path.join('./out', '404.html')).pipe(res)
 })
+
 
 module.exports = function (req, res, next) {
   return routes.reduce((next, route) => route(req, res, next), next)()
