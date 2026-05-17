@@ -24,6 +24,79 @@ main {
   background-color: var(--secondary-background-color);
 }
 
+#toc-sidebar {
+  position: fixed;
+  top: 32px;
+  left: 28px;
+  box-sizing: border-box;
+  width: 220px;
+  max-height: calc(100vh - 96px);
+  padding: 14px 10px 14px 12px;
+  overflow: auto;
+  color: var(--foreground-color);
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  box-shadow: 0 8px 24px rgba(27, 31, 35, 0.06);
+}
+
+#toc-sidebar-title {
+  margin: 0 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  opacity: 0.72;
+}
+
+#toc-sidebar ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#toc-sidebar li {
+  margin: 0;
+}
+
+#toc-sidebar button {
+  display: block;
+  width: 100%;
+  padding: 5px 6px;
+  overflow: hidden;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+#toc-sidebar button:hover {
+  background-color: var(--secondary-background-color);
+  border-left-color: currentColor;
+  opacity: 1;
+}
+
+#toc-sidebar .toc-level-2 {
+  padding-left: 8px;
+}
+
+#toc-sidebar .toc-level-3 {
+  padding-left: 16px;
+}
+
+#toc-sidebar .toc-level-4 {
+  padding-left: 24px;
+}
+
 #toggle-theme {
   float: left;
   vertical-align: middle;
@@ -73,4 +146,10 @@ main {
   padding-right: 16px;
   font-size: 14px;
   font-weight: 600;
+}
+
+@media (max-width: 1400px) {
+  #toc-sidebar {
+    display: none;
+  }
 }
